@@ -1,23 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67G-v4-0gL">
+                                <rect key="frame" x="16" y="220" width="288" height="128"/>
+                            </imageView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UG5-tQ-aMG">
+                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem title="Album" id="7So-b2-Ott">
+                                        <connections>
+                                            <action selector="pickFromAlbum:" destination="BYZ-38-t0r" id="oGe-Ge-uhi"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="Camera" id="4JH-Wf-7sv">
+                                        <connections>
+                                            <action selector="pickFromCamera:" destination="BYZ-38-t0r" id="Yhu-IB-fl4"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="67G-v4-0gL" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3Sg-gy-0Im"/>
+                            <constraint firstItem="UG5-tQ-aMG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="-16" id="4Od-wL-1yO"/>
+                            <constraint firstItem="67G-v4-0gL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9kK-FZ-g6M"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="UG5-tQ-aMG" secondAttribute="trailing" constant="-16" id="iX5-hH-Z4G"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="UG5-tQ-aMG" secondAttribute="bottom" id="r9y-Hp-0tN"/>
+                            <constraint firstItem="67G-v4-0gL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="sng-63-bfz"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="albumButton" destination="7So-b2-Ott" id="aPt-Ke-geN"/>
+                        <outlet property="cameraButton" destination="4JH-Wf-7sv" id="0FD-r3-6U1"/>
+                        <outlet property="imageView" destination="67G-v4-0gL" id="uMV-br-aqR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
