@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C473AD181E3557E800588906 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C473AD171E3557E800588906 /* Meme.swift */; };
+		C473AD1B1E3583F800588906 /* FontPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C473AD1A1E3583F800588906 /* FontPickerViewController.swift */; };
 		C4ACF13E1E35141C000D7491 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ACF13D1E35141C000D7491 /* AppDelegate.swift */; };
 		C4ACF1401E35141C000D7491 /* MemeMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ACF13F1E35141C000D7491 /* MemeMeViewController.swift */; };
 		C4ACF1431E35141C000D7491 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4ACF1411E35141C000D7491 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		C473AD171E3557E800588906 /* Meme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
+		C473AD1A1E3583F800588906 /* FontPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontPickerViewController.swift; sourceTree = "<group>"; };
 		C4ACF13A1E35141C000D7491 /* MemeMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemeMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4ACF13D1E35141C000D7491 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4ACF13F1E35141C000D7491 /* MemeMeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeMeViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				C4ACF1461E35141C000D7491 /* LaunchScreen.storyboard */,
 				C4ACF1491E35141C000D7491 /* Info.plist */,
 				C473AD171E3557E800588906 /* Meme.swift */,
+				C473AD1A1E3583F800588906 /* FontPickerViewController.swift */,
 			);
 			path = MemeMe;
 			sourceTree = "<group>";
@@ -140,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C473AD181E3557E800588906 /* Meme.swift in Sources */,
+				C473AD1B1E3583F800588906 /* FontPickerViewController.swift in Sources */,
 				C4ACF1401E35141C000D7491 /* MemeMeViewController.swift in Sources */,
 				C4ACF13E1E35141C000D7491 /* AppDelegate.swift in Sources */,
 			);

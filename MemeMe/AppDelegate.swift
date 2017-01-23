@@ -15,6 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Store memes in an array here so that other controllers can access it.
     var savedMemes = [Meme] ()
+    
+    // Selected font name
+    var fontName: String = "HelveticaNeue-CondensedBlack"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

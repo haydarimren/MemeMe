@@ -10,6 +10,9 @@ import UIKit
 
 class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
+    // AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     // Text Attributes
     let memeTextAttributes = [
         NSStrokeColorAttributeName: UIColor.black,
@@ -42,6 +45,9 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         //Set up share and cancel buttons
         shareButton.isEnabled = false
         cancelButton.isEnabled = true
+        
+        // Register for notifications for font changes
+        NotificationCenter.default.addObserver(self, selector: #selector(MemeMeViewController.changeFont), name: NSNotification.Name(rawValue: "fontChangeNotification"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,22 +109,14 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         )
     }
     
-    // Pick an image from either camera or photo library according to the sender button.
-    @IBAction func pickImage(_ sender: UIBarButtonItem) {
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
+    func changeFont() {
+        let fontName: String = appDelegate.fontName
         
-        if sender == albumButton {
-            pickerController.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        } else if sender == cameraButton {
-            pickerController.sourceType = UIImagePickerControllerSourceType.camera
-        }
-        
-        present(pickerController, animated: true, completion: nil)
+        topTextField.font = UIFont(name: fontName, size: 40)
+        bottomTextField.font = UIFont(name: fontName, size: 40)
     }
     
-    // MARK: Meme: UI Actions
-    
+    // Generates an image with the meme texts
     func generateMemedImage() -> UIImage {
         // Hide toolbars to prevent them appearing on the meme.
         topToolbar.isHidden = true
@@ -136,10 +134,34 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         return memedImage
     }
+
     
+    // MARK: Meme: UI Actions
     
-    // MARK: Share: Actions
+    // Pick an image from either camera or photo library according to the sender button.
+    @IBAction func pickImage(_ sender: UIBarButtonItem) {
+        let pickerController = UIImagePickerController()
+        pickerController.delegate = self
+        
+        if sender == albumButton {
+            pickerController.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        } else if sender == cameraButton {
+            pickerController.sourceType = UIImagePickerControllerSourceType.camera
+        }
+        
+        present(pickerController, animated: true, completion: nil)
+    }
     
+    // Brings up a popup view to pick up a font to display meme texts.
+    @IBAction func pickFont(_ sender: UIBarButtonItem) {
+        let fontPickerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "sbFontPickerId") as! FontPickerViewController
+        self.addChildViewController(fontPickerVC)
+        fontPickerVC.view.frame = self.view.frame
+        self.view.addSubview(fontPickerVC.view)
+        fontPickerVC.didMove(toParentViewController: self)
+    }
+    
+    // Brings up the share menu and calls the save as a final action before dismissing
     @IBAction func shareMeme(_ sender: AnyObject) {
         // Generate the Meme
         let memedImage = generateMemedImage()
@@ -158,8 +180,10 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         present(shareController, animated: true, completion: nil)
     }
     
+    // Cancels the current operation and sets all UI back to default state
     @IBAction func cancel(_ sender: Any) {
         // Set UI elements back to default
+        appDelegate.fontName = "HelveticaNeue-CondensedBlack"
         imageView.image = nil
         setTextFieldAttributes(topTextField, "TOP")
         setTextFieldAttributes(bottomTextField, "BOTTOM")
@@ -169,6 +193,7 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         dismiss(animated: true, completion: nil)
     }
     
+    // Saves the given image into an array as a Meme object
     func save(_ memedImage: UIImage) {
         let meme = Meme(
             topText: topTextField.text!,
@@ -178,7 +203,6 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         )
         
         // Add it to the memes array on the Application Delegate
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.savedMemes.append(meme)
         
         dismiss(animated: true, completion: nil)
