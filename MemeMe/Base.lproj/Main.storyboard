@@ -30,13 +30,13 @@
                                     <constraint firstAttribute="height" constant="44" id="ILh-Ay-v7i"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem title="Share" id="q87-5v-YJh" userLabel="Share Button">
+                                    <barButtonItem systemItem="action" id="q87-5v-YJh" userLabel="Share Button">
                                         <connections>
                                             <action selector="shareMeme:" destination="BYZ-38-t0r" id="fBn-J4-Txb"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="fHl-Fw-91v"/>
-                                    <barButtonItem title="Cancel" id="2h9-X4-dyy" userLabel="Cancel Button">
+                                    <barButtonItem systemItem="cancel" id="2h9-X4-dyy" userLabel="Cancel Button">
                                         <connections>
                                             <action selector="cancel:" destination="BYZ-38-t0r" id="H42-9w-TP9"/>
                                         </connections>
@@ -122,6 +122,7 @@ CQkJA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-88" y="34"/>
         </scene>
         <!--Font Picker View Controller-->
         <scene sceneID="2UZ-3m-zL1">
@@ -139,7 +140,7 @@ CQkJA
                                 <rect key="frame" x="-10" y="159" width="340" height="250"/>
                                 <subviews>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z91-3k-fwl">
-                                        <rect key="frame" x="10" y="50" width="372" height="150"/>
+                                        <rect key="frame" x="10" y="50" width="320" height="150"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="NAB-0w-nnv"/>
                                             <constraint firstAttribute="width" constant="320" id="bMz-xK-7MV"/>

@@ -36,6 +36,8 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>MemeMe wants to access your photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>MemeMe wants to access your camera.</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
