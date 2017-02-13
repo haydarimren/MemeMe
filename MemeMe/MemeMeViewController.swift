@@ -9,9 +9,13 @@
 import UIKit
 
 class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
-    
+        
     // AppDelegate
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    // For editing memes
+    var editableMeme: Meme?
+    var editableMemeIndex: Int?
     
     // Text Attributes
     let memeTextAttributes = [
@@ -29,7 +33,6 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var topTextField: UITextField! { didSet { topTextField.delegate = self } }
     @IBOutlet weak var bottomTextField: UITextField! { didSet { bottomTextField.delegate = self } }
     @IBOutlet weak var bottomToolbar: UIToolbar!
-    @IBOutlet weak var topToolbar: UIToolbar!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
@@ -48,6 +51,9 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Register for notifications for font changes
         NotificationCenter.default.addObserver(self, selector: #selector(MemeMeViewController.changeFont), name: NSNotification.Name(rawValue: "fontChangeNotification"), object: nil)
+        
+        // If there is a meme to be edited, load it
+        loadMeme()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +64,9 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Subscribe to keyboard notifications
         subscribeToKeyboardNotifications()
+        
+        // Hide the tab bar
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,6 +74,9 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Unsubscribe from keyboard notifications
         unsubscribeFromKeyboardNotifications()
+        
+        // Show the tab bar
+        self.tabBarController?.tabBar.isHidden = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,6 +85,19 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     // MARK: Helper functions
+    
+    // Loads a meme to the view. Is used by detail view.
+    func loadMeme() {
+        if (editableMeme != nil) {
+            topTextField.text = editableMeme!.topText
+            bottomTextField.text = editableMeme!.bottomText
+            topTextField.font = UIFont(name: editableMeme!.memeFontName, size: 40)
+            bottomTextField.font = UIFont(name: editableMeme!.memeFontName, size: 40)
+            imageView.image = editableMeme!.originalImage
+        } else {
+            return
+        }
+    }
     
     func setTextFieldAttributes(_ textField: UITextField,
                                 _ defaultText: String) {
@@ -109,6 +134,7 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         )
     }
     
+    // Change the font of the textfields.
     func changeFont() {
         let fontName: String = appDelegate.fontName
         
@@ -119,7 +145,7 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
     // Generates an image with the meme texts
     func generateMemedImage() -> UIImage {
         // Hide toolbars to prevent them appearing on the meme.
-        topToolbar.isHidden = true
+        self.navigationController?.isNavigationBarHidden = true;
         bottomToolbar.isHidden = true
         
         // Generate a memed image.
@@ -129,7 +155,7 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         UIGraphicsEndImageContext()
         
         // Show toolbars back, after the meme is generated.
-        topToolbar.isHidden = false
+        self.navigationController?.isNavigationBarHidden = false;
         bottomToolbar.isHidden = false
         
         return memedImage
@@ -178,6 +204,7 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
         
         present(shareController, animated: true, completion: nil)
+        
     }
     
     // Cancels the current operation and sets all UI back to default state
@@ -191,6 +218,9 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         // Clear the UI
         dismiss(animated: true, completion: nil)
+        
+        // Turn back to previous view
+        _ = self.navigationController?.popViewController(animated: true);
     }
     
     // Saves the given image into an array as a Meme object
@@ -199,13 +229,22 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
             topText: topTextField.text!,
             bottomText: bottomTextField.text!,
             originalImage: imageView.image!,
-            memedImage: memedImage
+            memedImage: memedImage,
+            memeFontName: (topTextField.font?.fontName)!
         )
         
-        // Add it to the memes array on the Application Delegate
-        appDelegate.savedMemes.append(meme)
+        // Add it to the memes array or edit an existing one in the array in the Application Delegate
+        if editableMemeIndex != nil {
+            appDelegate.savedMemes[editableMemeIndex!] = meme
+        } else {
+            appDelegate.savedMemes.append(meme)
+        }
         
+        // Dismiss the current view
         dismiss(animated: true, completion: nil)
+        
+        // Turn back to root view (sent memes view)
+        _ = self.navigationController?.popToRootViewController(animated: true)
     }
     
     
@@ -216,14 +255,12 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
     func keyboardWillShow(_ notification: Notification) {
         if bottomTextField.isEditing {
             view.frame.origin.y = -getKeyboardHeight(notification)
-            topToolbar.isHidden = true
         }
     }
     
     // Every time the keyboard hides, reset the view position
     func keyboardWillHide(_ notification: Notification) {
         view.frame.origin.y = 0
-        topToolbar.isHidden = false
     }
     
     // Calculates the height of the keyboard for the current device
@@ -244,6 +281,11 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
     }
     
+    // Enable Share button when text fields are edited.
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        shareButton.isEnabled = true
+    }
+    
     // Accept return key from the keyboard.
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -258,6 +300,7 @@ class MemeMeViewController: UIViewController, UIImagePickerControllerDelegate, U
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [String : Any]) {
         
+        // Once the image is chosen, set the imageview image, enable Share button and dismiss the view.
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             imageView.image = image
             shareButton.isEnabled = true
